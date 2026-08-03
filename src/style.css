@@ -1,0 +1,64 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+@import "@fontsource/fraunces/600.css";
+@import "@fontsource/fraunces/700.css";
+@import "@fontsource/figtree/400.css";
+@import "@fontsource/figtree/500.css";
+@import "@fontsource/figtree/600.css";
+@import "@fontsource/figtree/700.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --app-chrome-color: #ecf4ec;
+  --app-ink: #1f2d24;
+  --app-leaf: #3f7a4d;
+  --app-moss: #5c9a68;
+  --app-soil: #6b5344;
+  color-scheme: light;
+}
+
+.dark {
+  --app-chrome-color: #1c1917;
+  --app-ink: #e7efe8;
+  --app-leaf: #7fbf8c;
+  --app-moss: #5c9a68;
+  --app-soil: #c4a484;
+  color-scheme: dark;
+}
+
+html,
+body,
+#app {
+  background-color: var(--app-chrome-color);
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100dvh;
+  font-family: "Figtree", sans-serif;
+  color: var(--app-ink);
+}
+
+.font-brand {
+  font-family: "Fraunces", serif;
+}
+
+.app-shell {
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(92, 154, 104, 0.22), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(107, 83, 68, 0.12), transparent 50%),
+    linear-gradient(180deg, #ecf4ec 0%, #e4efe5 45%, #f3f0ea 100%);
+}
+
+.dark .app-shell {
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(92, 154, 104, 0.14), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(196, 164, 132, 0.08), transparent 50%),
+    linear-gradient(180deg, #1c1917 0%, #1a1f1b 50%, #1c1917 100%);
+}
