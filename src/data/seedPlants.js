@@ -8,7 +8,8 @@ export const seedPlants = [
     light: "bright-indirect",
     water_frequency_days: 7,
     humidity: "average",
-    image_url: null,
+    model_style: "broad-leaf",
+    image_url: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 2,
@@ -19,7 +20,8 @@ export const seedPlants = [
     light: "low to bright-indirect",
     water_frequency_days: 14,
     humidity: "low",
-    image_url: null,
+    model_style: "upright-blades",
+    image_url: "https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 3,
@@ -30,7 +32,8 @@ export const seedPlants = [
     light: "low to bright-indirect",
     water_frequency_days: 7,
     humidity: "average",
-    image_url: null,
+    model_style: "trailing",
+    image_url: "https://images.unsplash.com/photo-1593691509543-c55fb32d8de8?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 4,
@@ -41,7 +44,8 @@ export const seedPlants = [
     light: "bright-indirect",
     water_frequency_days: 7,
     humidity: "average",
-    image_url: null,
+    model_style: "broad-leaf",
+    image_url: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 5,
@@ -52,7 +56,8 @@ export const seedPlants = [
     light: "medium-indirect",
     water_frequency_days: 5,
     humidity: "high",
-    image_url: null,
+    model_style: "bushy",
+    image_url: "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 6,
@@ -63,6 +68,7 @@ export const seedPlants = [
     light: "low to bright-indirect",
     water_frequency_days: 21,
     humidity: "low",
-    image_url: null,
+    model_style: "upright-stems",
+    image_url: "https://images.unsplash.com/photo-1632207691143-643e2f19c6c2?auto=format&fit=crop&w=1200&q=80",
   },
 ];

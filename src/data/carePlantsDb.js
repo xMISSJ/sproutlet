@@ -1,11 +1,27 @@
 const STORAGE_KEY = "sproutlet.carePlants";
+const FAVORITES_MIGRATION_KEY = "sproutlet.favoritesMigrated";
 
 function readLocalCarePlants() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) return [];
+
+    let plants = parsed.map((item) => ({
+      ...item,
+      is_favorite:
+        typeof item.is_favorite === "boolean" ? item.is_favorite : true,
+    }));
+
+    // One-time: seed favorites so the cabinet isn't empty after the feature shipped
+    if (plants.length && !localStorage.getItem(FAVORITES_MIGRATION_KEY)) {
+      plants = plants.map((item) => ({ ...item, is_favorite: true }));
+      writeLocalCarePlants(plants);
+      localStorage.setItem(FAVORITES_MIGRATION_KEY, "1");
+    }
+
+    return plants;
   } catch {
     return [];
   }
@@ -29,7 +45,8 @@ export async function addPlantToCare({ plant, nickname = "", location = "", note
     notes,
     acquired_at: new Date().toISOString().slice(0, 10),
     last_watered_at: null,
-    image_url: plant.image_url,
+    is_favorite: true,
+    image_url: plant.image_url ?? null,
     plant,
     created_at: new Date().toISOString(),
   };
@@ -47,6 +64,14 @@ export async function markCarePlantWatered(id) {
     item.id === id
       ? { ...item, last_watered_at: new Date().toISOString() }
       : item,
+  );
+  writeLocalCarePlants(next);
+  return next.find((item) => item.id === id) ?? null;
+}
+
+export async function toggleCarePlantFavorite(id) {
+  const next = readLocalCarePlants().map((item) =>
+    item.id === id ? { ...item, is_favorite: !item.is_favorite } : item,
   );
   writeLocalCarePlants(next);
   return next.find((item) => item.id === id) ?? null;

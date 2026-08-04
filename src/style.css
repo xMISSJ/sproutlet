@@ -1,29 +1,35 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
-@import "@fontsource/fraunces/600.css";
-@import "@fontsource/fraunces/700.css";
-@import "@fontsource/figtree/400.css";
-@import "@fontsource/figtree/500.css";
-@import "@fontsource/figtree/600.css";
-@import "@fontsource/figtree/700.css";
+@import "@fontsource/syne/600.css";
+@import "@fontsource/syne/700.css";
+@import "@fontsource/syne/800.css";
+@import "@fontsource/manrope/400.css";
+@import "@fontsource/manrope/500.css";
+@import "@fontsource/manrope/600.css";
+@import "@fontsource/manrope/700.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --app-chrome-color: #ecf4ec;
-  --app-ink: #1f2d24;
-  --app-leaf: #3f7a4d;
-  --app-moss: #5c9a68;
-  --app-soil: #6b5344;
+  /* From https://dribbble.com/shots/26914856-Plants-Website-Design */
+  --ink: #010505;
+  --paper: #f6f7f3;
+  --sage: #9ab7af;
+  --forest: #364d42;
+  --mist: #6d8e88;
+  --moss: #556e69;
+  --mint: #75d2bc;
+  --leaf: #678a73;
+  --hero: #0a1f1c;
+  --hero-elevated: #122e28;
+  --app-chrome-color: var(--paper);
+  --app-ink: var(--forest);
   color-scheme: light;
 }
 
-.dark {
-  --app-chrome-color: #1c1917;
-  --app-ink: #e7efe8;
-  --app-leaf: #7fbf8c;
-  --app-moss: #5c9a68;
-  --app-soil: #c4a484;
+.theme-dark {
+  --app-chrome-color: var(--hero);
+  --app-ink: #f6f7f3;
   color-scheme: dark;
 }
 
@@ -41,24 +47,78 @@ body {
 
 body {
   min-height: 100dvh;
-  font-family: "Figtree", sans-serif;
+  font-family: "Manrope", sans-serif;
   color: var(--app-ink);
 }
 
 .font-brand {
-  font-family: "Fraunces", serif;
+  font-family: "Syne", sans-serif;
 }
 
 .app-shell {
-  background:
-    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(92, 154, 104, 0.22), transparent 55%),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(107, 83, 68, 0.12), transparent 50%),
-    linear-gradient(180deg, #ecf4ec 0%, #e4efe5 45%, #f3f0ea 100%);
+  transition: background-color 0.45s ease;
 }
 
-.dark .app-shell {
+.app-shell.theme-light {
   background:
-    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(92, 154, 104, 0.14), transparent 55%),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(196, 164, 132, 0.08), transparent 50%),
-    linear-gradient(180deg, #1c1917 0%, #1a1f1b 50%, #1c1917 100%);
+    radial-gradient(ellipse 70% 45% at 85% -5%, rgba(117, 210, 188, 0.18), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 0% 20%, rgba(154, 183, 175, 0.22), transparent 50%),
+    linear-gradient(180deg, #f6f7f3 0%, #eef2ed 48%, #f6f7f3 100%);
+}
+
+.app-shell.theme-dark {
+  background:
+    radial-gradient(ellipse 80% 55% at 50% -20%, rgba(117, 210, 188, 0.12), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 80%, rgba(54, 77, 66, 0.55), transparent 50%),
+    linear-gradient(180deg, #061612 0%, #0a1f1c 45%, #071814 100%);
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.anim-rise {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anim-rise-delay {
+  animation: rise-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.anim-rise-delay-2 {
+  animation: rise-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+}
+
+.anim-fade {
+  animation: fade-in 0.6s ease both;
+}
+
+.pill-nav {
+  backdrop-filter: blur(16px);
+}
+
+.surface-card {
+  border-radius: 2rem;
+}
+
+@media (min-width: 640px) {
+  .surface-card {
+    border-radius: 2.5rem;
+  }
 }

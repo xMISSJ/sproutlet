@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 
 const route = useRoute();
@@ -7,6 +8,10 @@ const links = [
   { to: "/", label: "My plants", name: "my-plants" },
   { to: "/catalog", label: "Catalog", name: "catalog" },
 ];
+
+const isDarkShell = computed(
+  () => route.name === "my-plants" || route.name === "catalog" || route.name === "plant-detail",
+);
 
 function isActive(name) {
   if (name === "catalog") {
@@ -17,37 +22,75 @@ function isActive(name) {
 </script>
 
 <template>
-  <div class="app-shell min-h-dvh text-[var(--app-ink)]">
-    <header class="border-b border-emerald-900/10 bg-white/50 backdrop-blur-md dark:border-emerald-100/10 dark:bg-stone-950/50">
-      <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <RouterLink to="/" class="group flex items-baseline gap-2 no-underline">
-          <span class="font-brand text-3xl font-semibold tracking-tight text-emerald-800 transition-colors group-hover:text-emerald-700 dark:text-emerald-200 dark:group-hover:text-emerald-100">
-            Sproutlet
-          </span>
-          <span class="hidden text-sm text-stone-500 sm:inline dark:text-stone-400">
-            your plants, quietly tended
-          </span>
+  <div
+    class="app-shell min-h-dvh"
+    :class="isDarkShell ? 'theme-dark text-[var(--paper)]' : 'theme-light text-[var(--forest)]'"
+  >
+    <header class="pointer-events-none sticky top-0 z-40 px-4 pt-4 sm:px-6 sm:pt-5">
+      <nav
+        class="pill-nav pointer-events-auto mx-auto flex max-w-3xl items-center gap-1 rounded-full border p-1.5 shadow-[0_10px_40px_rgba(1,5,5,0.12)] anim-fade"
+        :class="
+          isDarkShell
+            ? 'border-white/10 bg-[rgba(10,31,28,0.72)]'
+            : 'border-[var(--forest)]/10 bg-white/75'
+        "
+      >
+        <RouterLink
+          to="/"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full no-underline transition-transform hover:scale-105"
+          :class="isDarkShell ? 'bg-white/10 text-[var(--mint)]' : 'bg-[var(--hero)] text-[var(--mint)]'"
+          aria-label="Sproutlet home"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M12 20c0-6 3.5-10.5 8-12-1.2 5.2-4.2 9-8 12Z"
+              fill="currentColor"
+              opacity="0.95"
+            />
+            <path
+              d="M12 20c0-6-3.5-10.5-8-12 1.2 5.2 4.2 9 8 12Z"
+              fill="currentColor"
+              opacity="0.55"
+            />
+            <path d="M12 20V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
         </RouterLink>
 
-        <nav class="flex items-center gap-1 rounded-full border border-emerald-900/10 bg-white/70 p-1 dark:border-emerald-100/10 dark:bg-stone-900/70">
+        <div class="flex flex-1 items-center justify-center gap-1">
           <RouterLink
             v-for="link in links"
             :key="link.name"
             :to="link.to"
-            class="rounded-full px-3.5 py-1.5 text-sm font-medium no-underline transition-colors"
+            class="rounded-full px-4 py-2 text-sm font-semibold no-underline transition-colors"
             :class="
               isActive(link.name)
-                ? 'bg-emerald-700 text-white dark:bg-emerald-600'
-                : 'text-stone-600 hover:bg-emerald-50 hover:text-emerald-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-emerald-100'
+                ? isDarkShell
+                  ? 'bg-white text-[var(--hero)]'
+                  : 'bg-[var(--hero)] text-white'
+                : isDarkShell
+                  ? 'text-white/70 hover:bg-white/10 hover:text-white'
+                  : 'text-[var(--moss)] hover:bg-[var(--sage)]/25 hover:text-[var(--hero)]'
             "
           >
             {{ link.label }}
           </RouterLink>
-        </nav>
-      </div>
+        </div>
+
+        <RouterLink
+          to="/catalog"
+          class="hidden h-10 items-center rounded-full border px-4 text-sm font-semibold no-underline transition-colors sm:inline-flex"
+          :class="
+            isDarkShell
+              ? 'border-white/20 text-white/90 hover:bg-white/10'
+              : 'border-[var(--forest)]/20 text-[var(--forest)] hover:bg-[var(--sage)]/20'
+          "
+        >
+          Explore
+        </RouterLink>
+      </nav>
     </header>
 
-    <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <main class="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-8 sm:px-6 sm:pt-10">
       <RouterView />
     </main>
   </div>

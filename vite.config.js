@@ -10,7 +10,7 @@ export default defineConfig({
     ui({
       ui: {
         colors: {
-          primary: "emerald",
+          primary: "green",
           neutral: "stone",
         },
       },

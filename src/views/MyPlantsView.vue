@@ -1,19 +1,39 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import PlantCabinet from "../components/PlantCabinet.vue";
 import {
   listCarePlants,
   markCarePlantWatered,
   removeCarePlant,
+  toggleCarePlantFavorite,
 } from "../data/carePlantsDb";
 
+const PAGE_SIZE = 6;
+
+const route = useRoute();
 const router = useRouter();
 const carePlants = ref([]);
 const isLoading = ref(true);
+const page = ref(1);
 
 const sortedPlants = computed(() =>
   [...carePlants.value].sort((a, b) => String(a.nickname).localeCompare(String(b.nickname))),
 );
+
+const totalPages = computed(() => Math.max(1, Math.ceil(sortedPlants.value.length / PAGE_SIZE)));
+
+const pagedPlants = computed(() => {
+  const start = (page.value - 1) * PAGE_SIZE;
+  return sortedPlants.value.slice(start, start + PAGE_SIZE);
+});
+
+const pageLabel = computed(() => {
+  if (!sortedPlants.value.length) return "";
+  const start = (page.value - 1) * PAGE_SIZE + 1;
+  const end = Math.min(page.value * PAGE_SIZE, sortedPlants.value.length);
+  return `${start}–${end} of ${sortedPlants.value.length}`;
+});
 
 function daysSinceWatered(plant) {
   if (!plant.last_watered_at) return null;
@@ -29,10 +49,15 @@ function wateringHint(plant) {
   return `Watered ${days}d ago · every ${every}d`;
 }
 
+function clampPage() {
+  page.value = Math.min(Math.max(1, page.value), totalPages.value);
+}
+
 async function refresh() {
   isLoading.value = true;
   carePlants.value = await listCarePlants();
   isLoading.value = false;
+  clampPage();
 }
 
 async function onWatered(id) {
@@ -45,72 +70,234 @@ async function onRemove(id) {
   await refresh();
 }
 
+async function onToggleFavorite(id) {
+  await toggleCarePlantFavorite(id);
+  await refresh();
+}
+
+function goToPage(next) {
+  page.value = Math.min(Math.max(1, next), totalPages.value);
+}
+
 onMounted(refresh);
+
+watch(
+  () => route.name,
+  (name) => {
+    if (name === "my-plants") refresh();
+  },
+);
+
+watch(sortedPlants, clampPage);
 </script>
 
 <template>
-  <section class="grid gap-6">
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div class="max-w-2xl">
-        <h1 class="font-brand text-4xl font-semibold tracking-tight text-emerald-950 dark:text-emerald-50">
-          My plants
-        </h1>
-        <p class="mt-2 text-stone-600 dark:text-stone-300">
-          The ones currently in your care. Add more from the shared catalog whenever you bring a new plant home.
-        </p>
-      </div>
-      <UButton color="primary" @click="router.push('/catalog')">Browse catalog</UButton>
-    </div>
-
-    <div v-if="isLoading" class="py-16 text-center text-sm text-stone-500">Loading your plants…</div>
-
-    <div
-      v-else-if="!sortedPlants.length"
-      class="rounded-3xl border border-dashed border-emerald-800/20 bg-white/60 px-6 py-16 text-center dark:border-emerald-100/15 dark:bg-stone-900/40"
-    >
-      <p class="font-brand text-2xl text-emerald-900 dark:text-emerald-100">No plants in your care yet</p>
-      <p class="mx-auto mt-2 max-w-md text-sm text-stone-600 dark:text-stone-300">
-        Start with the catalog — pick a species, then it shows up here so you can track watering and notes.
+  <section class="grid gap-12 text-[var(--paper)]">
+    <div class="mx-auto max-w-3xl pt-6 text-center sm:pt-10">
+      <p class="anim-rise text-[11px] font-semibold tracking-[0.28em] text-[var(--mint)] uppercase">
+        Nature's best
       </p>
-      <UButton class="mt-6" color="primary" @click="router.push('/catalog')">Open catalog</UButton>
+      <h1 class="font-brand anim-rise-delay mt-4 text-[clamp(3.5rem,12vw,7.5rem)] leading-[0.9] font-extrabold tracking-tight text-white">
+        sproutlet
+      </h1>
+      <p class="anim-rise-delay-2 mx-auto mt-6 max-w-lg text-base text-white/70 sm:text-lg">
+        Quiet care for the plants you live with — track watering, browse a shared species catalog, and grow your collection.
+      </p>
     </div>
 
-    <div v-else class="grid gap-4">
-      <article
-        v-for="item in sortedPlants"
-        :key="item.id"
-        class="grid gap-4 rounded-2xl border border-emerald-900/10 bg-white/80 p-4 shadow-sm sm:grid-cols-[1fr_auto] sm:items-center dark:border-emerald-100/10 dark:bg-stone-900/70"
+    <PlantCabinet :care-plants="carePlants" />
+
+    <div v-if="isLoading" class="py-10 text-center text-sm text-white/50">Loading your plants…</div>
+
+    <template v-else>
+      <div
+        v-if="!sortedPlants.length"
+        class="anim-rise-delay-2 grid gap-4 lg:grid-cols-[0.85fr_1.15fr]"
       >
-        <div>
-          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h2 class="font-brand text-2xl font-semibold text-emerald-950 dark:text-emerald-50">
-              {{ item.nickname }}
-            </h2>
+        <article
+          class="surface-card flex flex-col justify-between gap-6 border border-white/10 bg-[var(--hero-elevated)] p-6 sm:p-8"
+        >
+          <div>
+            <p class="font-brand text-5xl font-bold text-white">6+</p>
+            <p class="mt-2 text-sm text-white/65">Species ready in the shared catalog</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex -space-x-2">
+              <span
+                v-for="tone in ['bg-[var(--mint)]', 'bg-[var(--sage)]', 'bg-[var(--leaf)]']"
+                :key="tone"
+                class="inline-flex h-9 w-9 rounded-full border-2 border-[var(--hero-elevated)]"
+                :class="tone"
+              />
+            </div>
             <button
-              v-if="item.plant"
               type="button"
-              class="cursor-pointer border-0 bg-transparent p-0 text-sm italic text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
-              @click="router.push({ name: 'plant-detail', params: { id: String(item.plant_id) } })"
+              class="ml-auto inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border-0 bg-white/10 text-white transition hover:bg-white/20"
+              aria-label="Open catalog"
+              @click="router.push('/catalog')"
             >
-              {{ item.plant.scientific_name || item.plant.common_name }}
+              <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
             </button>
           </div>
-          <p class="mt-2 text-sm text-stone-600 dark:text-stone-300">
-            {{ wateringHint(item) }}
-            <span v-if="item.location"> · {{ item.location }}</span>
-          </p>
-          <p v-if="item.notes" class="mt-1 text-sm text-stone-500 dark:text-stone-400">{{ item.notes }}</p>
+        </article>
+
+        <button
+          type="button"
+          class="surface-card group flex cursor-pointer items-center justify-between gap-4 border-0 bg-white px-6 py-6 text-left text-[var(--hero)] transition hover:-translate-y-0.5 sm:px-8"
+          @click="router.push('/catalog')"
+        >
+          <div>
+            <p class="font-brand text-xl font-bold sm:text-2xl">Explore the plant catalog</p>
+            <p class="mt-1 text-sm text-[var(--moss)]">Add your first plant and start tracking care</p>
+          </div>
+          <span
+            class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--hero)] text-white transition group-hover:scale-105"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <div v-else class="grid gap-5">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 class="font-brand text-2xl font-bold text-white">In your care</h2>
+            <p class="mt-1 text-sm text-white/60">
+              {{ sortedPlants.length }} plant{{ sortedPlants.length === 1 ? "" : "s" }}
+              <span v-if="totalPages > 1"> · {{ pageLabel }}</span>
+            </p>
+          </div>
+          <button
+            type="button"
+            class="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+            @click="router.push('/catalog')"
+          >
+            Browse catalog
+          </button>
         </div>
 
-        <div class="flex flex-wrap gap-2">
-          <UButton color="primary" variant="soft" size="sm" @click="onWatered(item.id)">
-            Mark watered
-          </UButton>
-          <UButton color="neutral" variant="outline" size="sm" @click="onRemove(item.id)">
-            Remove
-          </UButton>
+        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <article
+            v-for="item in pagedPlants"
+            :key="item.id"
+            class="surface-card flex flex-col overflow-hidden border border-white/10 bg-[var(--hero-elevated)]"
+          >
+            <button
+              type="button"
+              class="relative block aspect-[4/3] w-full cursor-pointer overflow-hidden border-0 p-0"
+              :aria-label="`Open ${item.nickname}`"
+              @click="
+                item.plant_id &&
+                  router.push({ name: 'plant-detail', params: { id: String(item.plant_id) } })
+              "
+            >
+              <img
+                v-if="item.image_url || item.plant?.image_url"
+                :src="item.image_url || item.plant?.image_url"
+                :alt="item.nickname"
+                class="h-full w-full object-cover"
+              />
+              <div
+                v-else
+                class="flex h-full w-full items-end bg-gradient-to-br from-[var(--sage)]/40 via-[var(--hero-elevated)] to-[var(--hero)] p-4"
+                aria-hidden="true"
+              >
+                <span class="font-brand text-5xl text-white/20">{{ item.nickname.slice(0, 1) }}</span>
+              </div>
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--hero-elevated)] via-transparent to-transparent" />
+            </button>
+
+            <div class="flex flex-1 flex-col gap-4 p-5 pt-3">
+              <div class="min-w-0 flex-1">
+                <div class="flex items-start justify-between gap-3">
+                  <h3 class="font-brand text-xl font-bold text-white">{{ item.nickname }}</h3>
+                  <button
+                    type="button"
+                    class="inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border transition"
+                    :class="
+                      item.is_favorite
+                        ? 'border-[var(--mint)]/40 bg-[var(--mint)]/15 text-[var(--mint)]'
+                        : 'border-white/15 bg-transparent text-white/55 hover:bg-white/10 hover:text-white'
+                    "
+                    :aria-pressed="item.is_favorite"
+                    :aria-label="item.is_favorite ? 'Remove from favorites' : 'Add to favorites'"
+                    @click="onToggleFavorite(item.id)"
+                  >
+                    <svg class="h-4 w-4" viewBox="0 0 16 16" aria-hidden="true">
+                      <path
+                        d="M8 1.8 9.9 5.7l4.3.4-3.3 2.9.9 4.2L8 11.3l-3.8 2 0.9-4.2-3.3-2.9 4.3-.4L8 1.8Z"
+                        :fill="item.is_favorite ? 'currentColor' : 'none'"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <button
+                  v-if="item.plant"
+                  type="button"
+                  class="mt-1 cursor-pointer border-0 bg-transparent p-0 text-left text-sm text-white/55 underline-offset-2 hover:text-white hover:underline"
+                  @click="router.push({ name: 'plant-detail', params: { id: String(item.plant_id) } })"
+                >
+                  {{ item.plant.scientific_name || item.plant.common_name }}
+                </button>
+                <p class="mt-3 text-sm text-white/70">
+                  {{ wateringHint(item) }}
+                  <span v-if="item.location"> · {{ item.location }}</span>
+                </p>
+                <p v-if="item.notes" class="mt-1 line-clamp-2 text-sm text-white/45">{{ item.notes }}</p>
+              </div>
+
+              <div class="mt-auto flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  class="cursor-pointer rounded-full border-0 bg-[var(--mint)] px-3.5 py-1.5 text-sm font-semibold text-[var(--hero)] transition hover:brightness-110"
+                  @click="onWatered(item.id)"
+                >
+                  Mark watered
+                </button>
+                <button
+                  type="button"
+                  class="cursor-pointer rounded-full border border-white/20 bg-transparent px-3.5 py-1.5 text-sm font-semibold text-white/80 transition hover:bg-white/10"
+                  @click="onRemove(item.id)"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          </article>
         </div>
-      </article>
-    </div>
+
+        <div
+          v-if="totalPages > 1"
+          class="flex flex-wrap items-center justify-between gap-3 pt-1"
+        >
+          <p class="text-sm text-white/45">Page {{ page }} of {{ totalPages }}</p>
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="inline-flex h-10 cursor-pointer items-center rounded-full border border-white/20 bg-white/5 px-4 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-default disabled:opacity-40"
+              :disabled="page <= 1"
+              @click="goToPage(page - 1)"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              class="inline-flex h-10 cursor-pointer items-center rounded-full border border-white/20 bg-white/5 px-4 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-default disabled:opacity-40"
+              :disabled="page >= totalPages"
+              @click="goToPage(page + 1)"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
   </section>
 </template>

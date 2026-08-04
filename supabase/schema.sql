@@ -25,6 +25,7 @@ create table if not exists public.care_plants (
   last_watered_at timestamptz,
   notes text not null default '',
   image_url text,
+  is_favorite boolean not null default false,
   created_at timestamptz not null default timezone('utc', now())
 );
 
