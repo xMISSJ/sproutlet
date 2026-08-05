@@ -24,7 +24,7 @@ const previewPlants = seedPlants.slice(0, 3);
 
     <button
       type="button"
-      class="group relative isolate w-full cursor-pointer overflow-visible pt-16 text-left sm:pt-20"
+      class="group relative isolate w-full cursor-pointer overflow-visible pt-16 text-left transition-transform duration-[350ms] ease-in-out hover:-translate-y-[3px] sm:pt-20"
       @click="$emit('browse')"
     >
       <div
@@ -36,26 +36,26 @@ const previewPlants = seedPlants.slice(0, 3);
           :key="plant.id"
           :src="plant.image_url"
           :alt="plant.common_name"
-          class="pointer-events-none h-full w-auto max-w-[30%] object-contain object-bottom drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] transition-transform duration-[350ms] ease-in-out"
+          class="pointer-events-none h-full w-auto max-w-[30%] object-contain object-bottom drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)]"
           :class="[
-            index === 0 ? '-mr-4 translate-y-1 -rotate-6 group-hover:-translate-y-0.5 sm:-mr-6' : '',
-            index === 1 ? 'relative z-[1] scale-110 group-hover:scale-[1.14]' : '',
-            index === 2 ? '-ml-4 translate-y-1 rotate-6 group-hover:-translate-y-0.5 sm:-ml-6' : '',
+            index === 0 ? '-mr-4 translate-y-1 -rotate-6 sm:-mr-6' : '',
+            index === 1 ? 'relative z-[1] scale-110' : '',
+            index === 2 ? '-ml-4 translate-y-1 rotate-6 sm:-ml-6' : '',
           ]"
           draggable="false"
         />
       </div>
 
       <div
-        class="relative z-[1] rounded-[1.35rem] border border-white/[0.14] bg-[linear-gradient(155deg,rgba(255,255,255,0.1)_0%,rgba(18,46,40,0.55)_42%,rgba(7,24,20,0.72)_100%)] px-6 pt-10 pb-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-[18px] transition-[transform,border-color,box-shadow] duration-[350ms] ease-in-out group-hover:-translate-y-[3px] group-hover:border-white/[0.22] group-hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_24px_50px_rgba(0,0,0,0.35)] sm:px-8 sm:pt-12 sm:pb-7"
+        class="relative z-[1] rounded-[1.35rem] border border-white/[0.14] bg-[linear-gradient(155deg,rgba(255,255,255,0.1)_0%,rgba(18,46,40,0.55)_42%,rgba(7,24,20,0.72)_100%)] px-6 pt-16 pb-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-[18px] transition-[border-color,box-shadow] duration-[350ms] ease-in-out group-hover:border-white/[0.22] group-hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_24px_50px_rgba(0,0,0,0.35)] sm:px-8 sm:pt-20 sm:pb-7"
       >
         <div class="mx-auto max-w-lg text-center">
           <h3 class="font-heading text-xl font-bold text-white sm:text-2xl">Your shelf is waiting</h3>
           <p class="mt-2 text-sm leading-relaxed text-white/60">
             Pick a species from the catalog, add it to your care, and keep track of watering from here.
           </p>
-          <span
-            class="mt-5 inline-flex items-center gap-2 rounded-lg bg-mint px-3.5 py-2 text-sm font-semibold text-hero transition group-hover:brightness-110"
+          <p
+            class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-mint transition group-hover:text-mint/90"
           >
             Explore catalog
             <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -67,7 +67,7 @@ const previewPlants = seedPlants.slice(0, 3);
                 stroke-linejoin="round"
               />
             </svg>
-          </span>
+          </p>
         </div>
       </div>
     </button>
