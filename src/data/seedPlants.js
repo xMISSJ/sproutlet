@@ -110,4 +110,18 @@ export const seedPlants = [
     model_style: "bushy",
     image_url: `${import.meta.env.BASE_URL}plants/dracaena.png`,
   },
+  {
+    id: "polyscias-balfouriana",
+    common_name: "Polyscias Balfouriana",
+    english_name: "Balfour Aralia",
+    scientific_name: "Polyscias balfouriana",
+    description:
+      "Also called Balfour aralia — rounded, dinner-plate leaves on woody stems, often with a creamy edge. Prefers bright, indirect light and evenly moist soil; dislikes drafts and soggy roots.",
+    care_level: "moderate",
+    light: "bright-indirect",
+    water_frequency_days: 7,
+    humidity: "humid",
+    model_style: "bushy",
+    image_url: `${import.meta.env.BASE_URL}plants/polyscias-balfouriana.png`,
+  },
 ];
