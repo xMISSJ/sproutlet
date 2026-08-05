@@ -1,12 +1,17 @@
 # Sproutlet
 
-A personal plant journal with a catalog you control. Add plants with your own photos, names, and care notes, then track watering in My plants.
+Quiet care for the plants you live with.
 
-## Features (v0)
+Sproutlet started as a personal plant journal. It may grow into a small shared app where anyone can browse a species catalog, keep plants in their care, track watering, and see what each plant needs—light, humidity, and how often to water.
 
-- **Catalog** — create plants with your own image, name, description, and care details (stored locally). Starter seed plants included.
-- **My plants** — personal care collection with favorites for the 3D cabinet
-- **Care basics** — mark watered and follow each plant’s watering cadence
+## What it does
+
+- **Catalog** — browse species with care level, watering cadence, and other needs; add the ones you own
+- **My plants** — your care collection, with last-watered tracking and due reminders
+- **Plant details** — care notes for each species so you know what it wants
+- **Cabinet** — a small 3D shelf for favorites
+
+Works locally out of the box. Optional Supabase wiring is ready for auth and cloud sync when you open it up to more people.
 
 ## Run locally
 
@@ -15,9 +20,9 @@ npm install
 npm run dev
 ```
 
-Optional: copy `.env.example` to `.env` for Supabase when you want cloud sync/auth.
+Optional: copy `.env.example` to `.env` for Supabase (cloud sync / auth).
 
-## Data model (for later rollout)
+## Data model (for multi-user rollout)
 
 | Table | Purpose |
 | --- | --- |

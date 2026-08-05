@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CareEmptyState: typeof import('./src/components/CareEmptyState.vue')['default']
     CarePlantCard: typeof import('./src/components/CarePlantCard.vue')['default']
     GlassPlantCard: typeof import('./src/components/GlassPlantCard.vue')['default']
     PlantCabinet: typeof import('./src/components/PlantCabinet.vue')['default']

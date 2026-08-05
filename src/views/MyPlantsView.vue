@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import CareEmptyState from "../components/CareEmptyState.vue";
 import CarePlantCard from "../components/CarePlantCard.vue";
 import PlantCabinet from "../components/PlantCabinet.vue";
 import {
@@ -110,57 +111,10 @@ watch(sortedPlants, clampPage);
     <div v-if="isLoading" class="py-10 text-center text-sm text-white/50">Loading your plants…</div>
 
     <template v-else>
-      <div
+      <CareEmptyState
         v-if="!sortedPlants.length"
-        class="anim-rise-delay-2 grid gap-4 lg:grid-cols-[0.85fr_1.15fr]"
-      >
-        <article
-          class="surface-card flex flex-col justify-between gap-6 border border-white/10 bg-[var(--hero-elevated)] p-6 sm:p-8"
-        >
-          <div>
-            <p class="font-heading text-5xl font-bold text-white">6+</p>
-            <p class="mt-2 text-sm text-white/65">Species ready in the shared catalog</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <div class="flex -space-x-2">
-              <span
-                v-for="tone in ['bg-[var(--mint)]', 'bg-[var(--sage)]', 'bg-[var(--leaf)]']"
-                :key="tone"
-                class="inline-flex h-9 w-9 rounded-full border-2 border-[var(--hero-elevated)]"
-                :class="tone"
-              />
-            </div>
-            <button
-              type="button"
-              class="ml-auto inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border-0 bg-white/10 text-white transition hover:bg-white/20"
-              aria-label="Open catalog"
-              @click="router.push('/catalog')"
-            >
-              <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-          </div>
-        </article>
-
-        <button
-          type="button"
-          class="surface-card group flex cursor-pointer items-center justify-between gap-4 border-0 bg-white px-6 py-6 text-left text-[var(--hero)] transition hover:-translate-y-0.5 sm:px-8"
-          @click="router.push('/catalog')"
-        >
-          <div>
-            <p class="font-heading text-xl font-bold sm:text-2xl">Explore the plant catalog</p>
-            <p class="mt-1 text-sm text-[var(--moss)]">Add your first plant and start tracking care</p>
-          </div>
-          <span
-            class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--hero)] text-white transition group-hover:scale-105"
-          >
-            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </span>
-        </button>
-      </div>
+        @browse="router.push('/catalog')"
+      />
 
       <div v-else class="grid gap-5">
         <div class="relative z-10 flex flex-wrap items-end justify-between gap-3">
