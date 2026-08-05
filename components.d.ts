@@ -11,12 +11,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppNav: typeof import('./src/components/AppNav.vue')['default']
     CarePlantCard: typeof import('./src/components/CarePlantCard.vue')['default']
     GlassPlantCard: typeof import('./src/components/GlassPlantCard.vue')['default']
     PlantCabinet: typeof import('./src/components/PlantCabinet.vue')['default']
     PlantCard: typeof import('./src/components/PlantCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SproutletMark: typeof import('./src/components/SproutletMark.vue')['default']
     UInput: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Input.vue')['default']
   }
 }
