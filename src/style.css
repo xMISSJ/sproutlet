@@ -28,6 +28,19 @@
   color-scheme: light;
 }
 
+@theme inline {
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-sage: var(--sage);
+  --color-forest: var(--forest);
+  --color-mist: var(--mist);
+  --color-moss: var(--moss);
+  --color-mint: var(--mint);
+  --color-leaf: var(--leaf);
+  --color-hero: var(--hero);
+  --color-hero-elevated: var(--hero-elevated);
+}
+
 .theme-dark {
   --app-chrome-color: var(--hero);
   --app-ink: #f6f7f3;

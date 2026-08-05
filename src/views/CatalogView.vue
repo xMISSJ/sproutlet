@@ -350,14 +350,13 @@ watch(query, scheduleSearch);
         No plants matched that search. Add your own with the button above.
       </div>
 
-      <div v-else class="anim-rise-delay-2 grid gap-x-4 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
+      <div v-else class="anim-rise-delay-2 grid items-stretch gap-x-5 gap-y-28 pt-24 sm:grid-cols-1 xl:grid-cols-2">
         <PlantCard
           v-for="(plant, index) in plants"
           :key="plant.id"
           :plant="plant"
           :in-care="isPlantInCare(plant.id, carePlants)"
           :featured="index === 0 && plants.length === 1"
-          class="pt-8"
           @add="onAdd"
           @open="onOpen"
         />

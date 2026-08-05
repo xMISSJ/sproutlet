@@ -31,7 +31,7 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
 
 <template>
   <article
-    class="glass-plant-card group relative flex flex-col"
+    class="glass-plant-card group relative"
     :class="featured ? 'is-featured' : ''"
   >
     <div class="glass-plant-card__stage">
@@ -52,18 +52,18 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
       </button>
     </div>
 
-    <div class="glass-plant-card__body">
-      <div class="min-w-0 flex-1">
-        <h3 class="font-heading text-xl font-bold text-white sm:text-2xl">{{ title }}</h3>
-        <p v-if="description" class="mt-2 line-clamp-3 text-sm leading-relaxed text-white/55">
+    <div class="glass-plant-card__body py-2">
+      <div class="min-w-0">
+        <h3 class="font-heading text-base font-bold text-white sm:text-lg">{{ title }}</h3>
+        <p v-if="description" class="mt-1 line-clamp-2 text-sm leading-snug text-white/55">
           {{ description }}
         </p>
       </div>
 
-      <div class="mt-5 flex items-end justify-between gap-3">
+      <div class="mt-3 flex items-end justify-between gap-2">
         <div class="min-w-0">
           <slot name="meta">
-            <p v-if="meta" class="text-base font-semibold text-white">{{ meta }}</p>
+            <p v-if="meta" class="text-sm font-semibold text-white">{{ meta }}</p>
           </slot>
         </div>
         <div class="flex shrink-0 items-center gap-2">
@@ -92,14 +92,22 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
 
 <style scoped>
 .glass-plant-card {
-  --card-radius: 2.25rem;
-  position: relative;
+  --card-radius: 1.35rem;
+  --card-height: 11.75rem;
+  --image-col: 13rem;
+  --image-width: 12rem;
+  --image-inset: 0.75rem;
+  --pot-inset: 0.65rem;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   isolation: isolate;
+  height: var(--card-height);
   overflow: visible;
   border-radius: var(--card-radius);
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: linear-gradient(
-    165deg,
+    120deg,
     rgba(255, 255, 255, 0.1) 0%,
     rgba(18, 46, 40, 0.55) 42%,
     rgba(7, 24, 20, 0.72) 100%
@@ -116,7 +124,7 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
 }
 
 .glass-plant-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: rgba(255, 255, 255, 0.22);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
@@ -124,28 +132,27 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
 }
 
 .glass-plant-card.is-featured {
-  min-height: 100%;
+  --card-height: 13rem;
+  --image-col: 14rem;
+  --image-width: 13rem;
 }
 
 .glass-plant-card__stage {
   position: relative;
   z-index: 3;
-  margin-top: -4.5rem;
-  padding: 0 0.75rem;
-  min-height: 13.5rem;
+  flex: none;
+  width: var(--image-col);
+  overflow: visible;
   pointer-events: none;
 }
 
-.glass-plant-card.is-featured .glass-plant-card__stage {
-  min-height: 18rem;
-  margin-top: -5.5rem;
-}
-
 .glass-plant-card__media {
+  position: absolute;
+  inset-inline: var(--image-inset);
+  bottom: var(--pot-inset);
+  z-index: 2;
   display: flex;
-  width: 100%;
-  height: 100%;
-  min-height: inherit;
+  width: auto;
   cursor: pointer;
   align-items: flex-end;
   justify-content: center;
@@ -157,30 +164,25 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
 
 .glass-plant-card__image {
   display: block;
-  max-height: 15rem;
-  width: auto;
-  max-width: 92%;
+  width: var(--image-width);
+  max-width: 100%;
+  height: auto;
   object-fit: contain;
   object-position: bottom center;
   filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.5));
   pointer-events: none;
 }
 
-.glass-plant-card.is-featured .glass-plant-card__image {
-  max-height: 20rem;
-}
-
 .glass-plant-card__fallback {
   display: grid;
   place-items: center;
-  width: 5.5rem;
-  height: 5.5rem;
-  margin-bottom: 1rem;
+  width: 4.5rem;
+  height: 4.5rem;
   border-radius: 999px;
   background: rgba(117, 210, 188, 0.12);
   color: rgba(246, 247, 243, 0.35);
   font-family: "Quicksand", sans-serif;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 800;
 }
 
@@ -189,14 +191,17 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
   z-index: 1;
   display: flex;
   flex: 1;
+  min-width: 0;
   flex-direction: column;
-  padding: 0.25rem 1.35rem 1.35rem;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 0.9rem 1rem 0.9rem 0.15rem;
 }
 
 .glass-plant-card__arrow {
   display: inline-flex;
-  height: 2.6rem;
-  width: 2.6rem;
+  height: 2.25rem;
+  width: 2.25rem;
   cursor: pointer;
   align-items: center;
   justify-content: center;

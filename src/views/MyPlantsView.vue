@@ -7,7 +7,6 @@ import {
   listCarePlants,
   markCarePlantWatered,
   removeCarePlant,
-  toggleCarePlantFavorite,
 } from "../data/carePlantsDb";
 
 const PAGE_SIZE = 6;
@@ -71,11 +70,6 @@ async function onRemove(id) {
   await refresh();
 }
 
-async function onToggleFavorite(id) {
-  await toggleCarePlantFavorite(id);
-  await refresh();
-}
-
 function goToPage(next) {
   page.value = Math.min(Math.max(1, next), totalPages.value);
 }
@@ -99,7 +93,7 @@ watch(sortedPlants, clampPage);
         Nature's best
       </p>
       <h1 class="font-brand anim-rise-delay mt-4 text-[clamp(3.5rem,12vw,7.5rem)] leading-[0.9] font-extrabold tracking-tight text-white">
-        sproutlet
+        Sproutlet
       </h1>
       <p class="anim-rise-delay-2 mx-auto mt-6 max-w-lg text-base text-white/70 sm:text-lg">
         Quiet care for the plants you live with — track watering, browse a shared species catalog, and grow your collection.
@@ -181,11 +175,10 @@ watch(sortedPlants, clampPage);
           </button>
         </div>
 
-        <div class="grid gap-x-4 gap-y-14 pt-6 sm:grid-cols-2 xl:grid-cols-3">
+        <div class="grid grid-cols-2 items-end gap-4 pt-2 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
           <CarePlantCard
             v-for="item in pagedPlants"
             :key="item.id"
-            class="pt-12"
             :item="item"
             :watering-hint="wateringHint(item)"
             @open="
@@ -193,7 +186,6 @@ watch(sortedPlants, clampPage);
                 careItem.plant_id &&
                 router.push({ name: 'plant-detail', params: { id: String(careItem.plant_id) } })
             "
-            @favorite="onToggleFavorite"
             @water="onWatered"
             @remove="onRemove"
           />

@@ -1,0 +1,38 @@
+---
+description: Prefer Sproutlet theme color utilities over arbitrary var() Tailwind classes
+globs: **/*.{vue,css}
+alwaysApply: false
+---
+
+# Theme color utilities
+
+Brand colors live in `src/style.css` (`:root` + `@theme`). Use Tailwind theme utilities — never arbitrary `[var(--token)]` classes.
+
+```html
+<!-- ❌ BAD -->
+<div class="border-[var(--forest)] text-[var(--mint)] bg-[var(--hero)]" />
+<div class="border-[var(--forest)]/10" />
+
+<!-- ✅ GOOD -->
+<div class="border-forest text-mint bg-hero" />
+<div class="border-forest/10" />
+```
+
+## Tokens → utilities
+
+| CSS var | Utilities |
+| --- | --- |
+| `--forest` | `text-forest`, `bg-forest`, `border-forest` |
+| `--paper` | `text-paper`, `bg-paper`, `border-paper` |
+| `--sage` | `text-sage`, `bg-sage`, `border-sage` |
+| `--mist` | `text-mist`, `bg-mist`, `border-mist` |
+| `--moss` | `text-moss`, `bg-moss`, `border-moss` |
+| `--mint` | `text-mint`, `bg-mint`, `border-mint` |
+| `--leaf` | `text-leaf`, `bg-leaf`, `border-leaf` |
+| `--hero` | `text-hero`, `bg-hero`, `border-hero` |
+| `--hero-elevated` | `text-hero-elevated`, `bg-hero-elevated`, `border-hero-elevated` |
+| `--ink` | `text-ink`, `bg-ink`, `border-ink` |
+
+Opacity modifiers work the same way: `border-forest/20`, `bg-mint/15`.
+
+If a color token is missing from `@theme`, add it there — do not fall back to `[var(--…)]`.
