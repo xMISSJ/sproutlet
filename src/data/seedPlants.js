@@ -82,4 +82,32 @@ export const seedPlants = [
     model_style: "bushy",
     image_url: `${import.meta.env.BASE_URL}plants/olea-europaea.png`,
   },
+  {
+    id: "bromelia",
+    common_name: "Bromelia",
+    english_name: "Ornamental Pineapple",
+    scientific_name: "Ananas comosus",
+    description:
+      "A compact bromeliad with a spiky green rosette and a small pineapple at the center. Prefers bright, indirect light; keep the central cup lightly filled and water the soil sparingly so roots never sit soggy.",
+    care_level: "easy",
+    light: "bright-indirect",
+    water_frequency_days: 10,
+    humidity: "humid",
+    model_style: "bushy",
+    image_url: `${import.meta.env.BASE_URL}plants/bromelia.png`,
+  },
+  {
+    id: "dracaena",
+    common_name: "Dracaena",
+    english_name: "Lemon Lime Dracaena",
+    scientific_name: "Dracaena fragrans",
+    description:
+      "A forgiving houseplant with arching sword leaves striped in green and chartreuse. Happy in bright, indirect light; let the top soil dry between waterings and avoid standing water.",
+    care_level: "easy",
+    light: "bright-indirect",
+    water_frequency_days: 10,
+    humidity: "average",
+    model_style: "bushy",
+    image_url: `${import.meta.env.BASE_URL}plants/dracaena.png`,
+  },
 ];

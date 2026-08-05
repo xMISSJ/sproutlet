@@ -28,7 +28,7 @@ const previewPlants = seedPlants.slice(0, 3);
       @click="$emit('browse')"
     >
       <div
-        class="absolute inset-x-0 top-0 z-[2] flex h-[7.5rem] items-end justify-center sm:h-[9rem]"
+        class="absolute inset-x-0 top-0 z-[2] flex items-end justify-center"
         aria-hidden="true"
       >
         <img
@@ -36,11 +36,13 @@ const previewPlants = seedPlants.slice(0, 3);
           :key="plant.id"
           :src="plant.image_url"
           :alt="plant.common_name"
-          class="pointer-events-none h-full w-auto max-w-[30%] object-contain object-bottom drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)]"
+          class="pointer-events-none w-auto object-contain object-bottom drop-shadow-[0_12px_16px_rgba(0,0,0,0.4)]"
           :class="[
-            index === 0 ? '-mr-4 translate-y-1 -rotate-6 sm:-mr-6' : '',
-            index === 1 ? 'relative z-[1] scale-110' : '',
-            index === 2 ? '-ml-4 translate-y-1 rotate-6 sm:-ml-6' : '',
+            index === 1
+              ? 'relative z-[1] h-[8.25rem] sm:h-[10rem]'
+              : 'h-[7rem] sm:h-[8.5rem]',
+            index === 0 ? '-mr-5 sm:-mr-7' : '',
+            index === 2 ? '-ml-5 sm:-ml-7' : '',
           ]"
           draggable="false"
         />
