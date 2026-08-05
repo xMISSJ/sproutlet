@@ -60,7 +60,7 @@ const initial = computed(() => props.item.nickname?.trim().slice(0, 1).toUpperCa
           class="relative z-[3] flex shrink-0 flex-col gap-[0.65rem] rounded-b-[1.25rem] border-t border-white/10 bg-[linear-gradient(180deg,rgba(7,24,20,0.28),rgba(7,24,20,0.5))] px-[0.85rem] pt-3 pb-[0.85rem]"
         >
           <div class="min-w-0">
-            <h3 class="font-heading truncate text-base font-bold text-white">{{ item.nickname }}</h3>
+            <h3 class="font-brand truncate text-xl font-bold text-white">{{ item.nickname }}</h3>
             <p class="mt-0.5 truncate text-xs font-semibold text-mint/90">{{ wateringHint }}</p>
           </div>
 

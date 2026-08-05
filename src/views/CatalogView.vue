@@ -94,7 +94,7 @@ watch(query, scheduleSearch);
 <template>
   <section class="grid gap-10 text-paper">
     <div class="anim-rise max-w-2xl">
-      <h1 class="font-heading text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+      <h1 class="font-brand text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
         Plant catalog
       </h1>
       <p class="mt-3 max-w-xl text-base text-white/65 sm:text-lg">

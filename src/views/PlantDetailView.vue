@@ -161,7 +161,7 @@ watch(() => props.id, refresh);
               <p class="text-xs font-semibold tracking-[0.2em] text-mint uppercase">
                 {{ isCustom ? "Your plant" : "Catalog species" }}
               </p>
-              <h1 class="font-heading mt-2 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+              <h1 class="font-brand mt-2 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                 {{ plant.common_name }}
               </h1>
               <p v-if="plant.scientific_name" class="mt-2 text-lg text-white/55 italic">

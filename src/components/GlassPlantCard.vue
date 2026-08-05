@@ -71,7 +71,7 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
       class="relative z-[1] flex min-w-0 flex-1 flex-col justify-between overflow-hidden py-[0.9rem] pr-4 pl-[0.15rem]"
     >
       <div class="min-w-0">
-        <h3 class="font-heading text-base font-bold leading-tight text-white sm:text-lg">{{ title }}</h3>
+        <h3 class="font-brand text-xl font-bold leading-tight text-white sm:text-2xl">{{ title }}</h3>
         <p v-if="subtitle" class="text-xs font-semibold leading-tight text-mint/90 sm:text-sm">{{ subtitle }}</p>
         <p v-if="description" class="mt-2.5 line-clamp-2 text-sm leading-snug text-white/55">
           {{ description }}
