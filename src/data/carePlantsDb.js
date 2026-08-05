@@ -1,3 +1,5 @@
+import { getCatalogPlant } from "./plantsDb";
+
 const STORAGE_KEY = "sproutlet.carePlants";
 const FAVORITES_MIGRATION_KEY = "sproutlet.favoritesMigrated";
 
@@ -31,8 +33,46 @@ function writeLocalCarePlants(plants) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
 }
 
+function applyCatalogPlant(item, catalogPlant) {
+  if (!catalogPlant) return item;
+  return {
+    ...item,
+    image_url: catalogPlant.image_url ?? null,
+    plant: catalogPlant,
+  };
+}
+
+async function hydrateCarePlant(item) {
+  try {
+    const catalogPlant = await getCatalogPlant(item.plant_id);
+    return applyCatalogPlant(item, catalogPlant);
+  } catch {
+    return item;
+  }
+}
+
 export async function listCarePlants() {
-  return readLocalCarePlants();
+  const plants = readLocalCarePlants();
+  if (!plants.length) return [];
+
+  const hydrated = await Promise.all(plants.map(hydrateCarePlant));
+  writeLocalCarePlants(hydrated);
+  return hydrated;
+}
+
+export async function syncCareEntriesForPlant(catalogPlant) {
+  if (!catalogPlant?.id) return readLocalCarePlants();
+
+  const current = readLocalCarePlants();
+  let changed = false;
+  const next = current.map((item) => {
+    if (String(item.plant_id) !== String(catalogPlant.id)) return item;
+    changed = true;
+    return applyCatalogPlant(item, catalogPlant);
+  });
+
+  if (changed) writeLocalCarePlants(next);
+  return next;
 }
 
 export async function addPlantToCare({ plant, nickname = "", location = "", notes = "" }) {

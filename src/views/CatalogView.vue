@@ -3,7 +3,7 @@ import { onMounted, reactive, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import PlantCard from "../components/PlantCard.vue";
 import { createCustomPlant } from "../data/customPlantsDb";
-import { fileToResizedDataUrl } from "../data/imageHelpers";
+import { fileToPlantCutoutDataUrl } from "../data/imageHelpers";
 import { DEFAULT_PLANT_FORM, PLANT_FORMS } from "../data/plantForms";
 import { searchCatalogPlants } from "../data/plantsDb";
 import { addPlantToCare, isPlantInCare, listCarePlants } from "../data/carePlantsDb";
@@ -23,6 +23,7 @@ const showForm = ref(false);
 const isSaving = ref(false);
 const formError = ref("");
 const imagePreview = ref("");
+const isProcessingImage = ref(false);
 
 const form = reactive({
   common_name: "",
@@ -96,12 +97,15 @@ async function onImageFileChange(event) {
   const file = event.target.files?.[0];
   if (!file) return;
   formError.value = "";
+  isProcessingImage.value = true;
   try {
-    const dataUrl = await fileToResizedDataUrl(file);
+    const dataUrl = await fileToPlantCutoutDataUrl(file);
     form.image_url = dataUrl;
     imagePreview.value = dataUrl;
   } catch (err) {
     formError.value = err?.message || "Could not use that image.";
+  } finally {
+    isProcessingImage.value = false;
   }
 }
 
@@ -154,7 +158,7 @@ watch(query, scheduleSearch);
   <section class="grid gap-10 text-[var(--paper)]">
     <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
       <div class="anim-rise max-w-2xl">
-        <h1 class="font-brand text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+        <h1 class="font-heading text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
           Plant catalog
         </h1>
         <p class="mt-3 max-w-xl text-base text-white/65 sm:text-lg">
@@ -194,7 +198,7 @@ watch(query, scheduleSearch);
       @submit.prevent="onCreatePlant"
     >
       <div>
-        <h2 class="font-brand text-2xl font-bold text-white">New catalog plant</h2>
+        <h2 class="font-heading text-2xl font-bold text-white">New catalog plant</h2>
         <p class="mt-1 text-sm text-white/55">Use your own photo and wording — nothing is pulled from an API.</p>
       </div>
 
@@ -280,6 +284,8 @@ watch(query, scheduleSearch);
             class="rounded-2xl border border-white/15 bg-black/20 px-4 py-2.5 text-white/70 file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--mint)] file:px-3 file:py-1 file:text-sm file:font-semibold file:text-[var(--hero)]"
             @change="onImageFileChange"
           />
+          <span class="text-white/45">Background is removed automatically so the plant sits on the glass card.</span>
+          <span v-if="isProcessingImage" class="text-[var(--mint)]">Removing background… this can take a few seconds.</span>
         </label>
         <div
           v-if="imagePreview"
@@ -344,36 +350,14 @@ watch(query, scheduleSearch);
         No plants matched that search. Add your own with the button above.
       </div>
 
-      <div
-        v-else
-        class="anim-rise-delay-2 grid gap-4 lg:grid-cols-[1.4fr_1fr]"
-      >
+      <div v-else class="anim-rise-delay-2 grid gap-x-4 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
         <PlantCard
-          :plant="plants[0]"
-          :in-care="isPlantInCare(plants[0].id, carePlants)"
-          featured
-          @add="onAdd"
-          @open="onOpen"
-        />
-        <div class="grid gap-4">
-          <PlantCard
-            v-for="plant in plants.slice(1, 3)"
-            :key="plant.id"
-            :plant="plant"
-            :in-care="isPlantInCare(plant.id, carePlants)"
-            compact
-            @add="onAdd"
-            @open="onOpen"
-          />
-        </div>
-      </div>
-
-      <div v-if="plants.length > 3" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <PlantCard
-          v-for="plant in plants.slice(3)"
+          v-for="(plant, index) in plants"
           :key="plant.id"
           :plant="plant"
           :in-care="isPlantInCare(plant.id, carePlants)"
+          :featured="index === 0 && plants.length === 1"
+          class="pt-8"
           @add="onAdd"
           @open="onOpen"
         />

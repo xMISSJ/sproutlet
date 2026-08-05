@@ -11,7 +11,7 @@ export const PLANT_FORMS = [
   {
     id: "upright-blades",
     label: "Upright blades",
-    hint: "Snake plant, tall sword-like leaves",
+    hint: "Tall sword-like leaves, upright blades",
   },
   {
     id: "trailing",

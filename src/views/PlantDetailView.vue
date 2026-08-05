@@ -2,10 +2,10 @@
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { deleteCustomPlant, isCustomPlantId, updateCustomPlant } from "../data/customPlantsDb";
-import { fileToResizedDataUrl } from "../data/imageHelpers";
+import { fileToPlantCutoutDataUrl } from "../data/imageHelpers";
 import { DEFAULT_PLANT_FORM, getPlantFormLabel, PLANT_FORMS } from "../data/plantForms";
 import { getCatalogPlant } from "../data/plantsDb";
-import { addPlantToCare, isPlantInCare, listCarePlants } from "../data/carePlantsDb";
+import { addPlantToCare, isPlantInCare, listCarePlants, syncCareEntriesForPlant } from "../data/carePlantsDb";
 
 const props = defineProps({
   id: {
@@ -80,7 +80,9 @@ async function onImageFileChange(event) {
   if (!file) return;
   formError.value = "";
   try {
-    form.image_url = await fileToResizedDataUrl(file);
+    formError.value = "Removing background…";
+    form.image_url = await fileToPlantCutoutDataUrl(file);
+    formError.value = "";
   } catch (err) {
     formError.value = err?.message || "Could not use that image.";
   }
@@ -92,6 +94,8 @@ async function onSave() {
   isSaving.value = true;
   try {
     plant.value = await updateCustomPlant(plant.value.id, { ...form });
+    await syncCareEntriesForPlant(plant.value);
+    carePlants.value = await listCarePlants();
     fillForm(plant.value);
     isEditing.value = false;
     notice.value = "Plant updated.";
@@ -144,10 +148,10 @@ watch(() => props.id, refresh);
             v-if="isEditing ? form.image_url : plant.image_url"
             :src="isEditing ? form.image_url : plant.image_url"
             :alt="plant.common_name"
-            class="aspect-[4/3] w-full object-cover"
+            class="mx-auto aspect-[4/3] w-full max-w-lg object-contain object-bottom p-6 sm:p-10"
           />
           <div v-else class="flex min-h-72 items-end justify-between p-8">
-            <span class="font-brand text-7xl text-white/20">{{ plant.common_name.slice(0, 1) }}</span>
+            <span class="font-heading text-7xl text-white/20">{{ plant.common_name.slice(0, 1) }}</span>
           </div>
         </div>
 
@@ -157,7 +161,7 @@ watch(() => props.id, refresh);
               <p class="text-xs font-semibold tracking-[0.2em] text-[var(--mint)] uppercase">
                 {{ isCustom ? "Your plant" : "Catalog species" }}
               </p>
-              <h1 class="font-brand mt-2 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+              <h1 class="font-heading mt-2 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                 {{ plant.common_name }}
               </h1>
               <p v-if="plant.scientific_name" class="mt-2 text-lg text-white/55 italic">
