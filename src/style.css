@@ -81,17 +81,11 @@ body {
 }
 
 .app-shell.theme-light {
-  background:
-    radial-gradient(ellipse 70% 45% at 85% -5%, rgba(117, 210, 188, 0.18), transparent 55%),
-    radial-gradient(ellipse 55% 40% at 0% 20%, rgba(154, 183, 175, 0.22), transparent 50%),
-    linear-gradient(180deg, #f6f7f3 0%, #eef2ed 48%, #f6f7f3 100%);
+  background: linear-gradient(180deg, #f6f7f3 0%, #eef2ed 100%);
 }
 
 .app-shell.theme-dark {
-  background:
-    radial-gradient(ellipse 80% 55% at 50% -20%, rgba(117, 210, 188, 0.12), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 100% 80%, rgba(54, 77, 66, 0.55), transparent 50%),
-    linear-gradient(180deg, #061612 0%, #0a1f1c 45%, #071814 100%);
+  background: linear-gradient(180deg, #061612 0%, #0a1f1c 100%);
 }
 
 @keyframes rise-in {

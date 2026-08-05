@@ -1,43 +1,54 @@
 import { getCatalogPlant } from "./plantsDb";
+import { readCache, readCacheFlag, writeCache, writeCacheFlag } from "./localCache";
 
 const STORAGE_KEY = "sproutlet.carePlants";
 const FAVORITES_MIGRATION_KEY = "sproutlet.favoritesMigrated";
 
+/** Persist only care fields — catalog details are re-hydrated on read. */
+function toStoredCarePlant(item) {
+  return {
+    id: item.id,
+    plant_id: item.plant_id,
+    nickname: item.nickname,
+    location: item.location ?? "",
+    notes: item.notes ?? "",
+    acquired_at: item.acquired_at ?? null,
+    last_watered_at: item.last_watered_at ?? null,
+    is_favorite: typeof item.is_favorite === "boolean" ? item.is_favorite : true,
+    image_url: item.image_url ?? null,
+    created_at: item.created_at ?? null,
+  };
+}
+
 function readLocalCarePlants() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
+  const parsed = readCache(STORAGE_KEY, []);
+  if (!Array.isArray(parsed)) return [];
 
-    let plants = parsed.map((item) => ({
-      ...item,
-      is_favorite:
-        typeof item.is_favorite === "boolean" ? item.is_favorite : true,
-    }));
+  let plants = parsed.map((item) => ({
+    ...toStoredCarePlant(item),
+    // Keep nested plant if an older cache already stored it (offline fallback)
+    ...(item.plant ? { plant: item.plant } : {}),
+  }));
 
-    // One-time: seed favorites so the cabinet isn't empty after the feature shipped
-    if (plants.length && !localStorage.getItem(FAVORITES_MIGRATION_KEY)) {
-      plants = plants.map((item) => ({ ...item, is_favorite: true }));
-      writeLocalCarePlants(plants);
-      localStorage.setItem(FAVORITES_MIGRATION_KEY, "1");
-    }
-
-    return plants;
-  } catch {
-    return [];
+  // One-time: seed favorites so the cabinet isn't empty after the feature shipped
+  if (plants.length && !readCacheFlag(FAVORITES_MIGRATION_KEY)) {
+    plants = plants.map((item) => ({ ...item, is_favorite: true }));
+    writeLocalCarePlants(plants);
+    writeCacheFlag(FAVORITES_MIGRATION_KEY);
   }
+
+  return plants;
 }
 
 function writeLocalCarePlants(plants) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+  writeCache(STORAGE_KEY, plants.map(toStoredCarePlant));
 }
 
 function applyCatalogPlant(item, catalogPlant) {
   if (!catalogPlant) return item;
   return {
     ...item,
-    image_url: catalogPlant.image_url ?? null,
+    image_url: catalogPlant.image_url ?? item.image_url ?? null,
     plant: catalogPlant,
   };
 }
@@ -56,7 +67,12 @@ export async function listCarePlants() {
   if (!plants.length) return [];
 
   const hydrated = await Promise.all(plants.map(hydrateCarePlant));
-  writeLocalCarePlants(hydrated);
+  // Re-persist lean rows; never fail the list if storage is full
+  try {
+    writeLocalCarePlants(hydrated);
+  } catch {
+    // Keep showing hydrated plants even if cache write fails
+  }
   return hydrated;
 }
 

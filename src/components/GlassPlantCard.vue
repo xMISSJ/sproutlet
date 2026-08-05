@@ -6,6 +6,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  subtitle: {
+    type: String,
+    default: "",
+  },
   description: {
     type: String,
     default: "",
@@ -31,31 +35,45 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
 
 <template>
   <article
-    class="glass-plant-card group relative"
-    :class="featured ? 'is-featured' : ''"
+    class="group relative isolate flex cursor-pointer flex-row items-stretch overflow-visible rounded-[1.35rem] border border-white/[0.14] bg-[linear-gradient(120deg,rgba(255,255,255,0.1)_0%,rgba(18,46,40,0.55)_42%,rgba(7,24,20,0.72)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-[18px] transition-[transform,border-color,box-shadow] duration-[350ms] ease-in-out hover:-translate-y-[3px] hover:border-white/[0.22] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_24px_50px_rgba(0,0,0,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[rgba(117,210,188,0.7)]"
+    :class="featured ? 'h-[13rem]' : 'h-[11.75rem]'"
+    role="link"
+    tabindex="0"
+    :aria-label="`Open ${title}`"
+    @click="$emit('open')"
+    @keydown.enter.prevent="$emit('open')"
+    @keydown.space.prevent="$emit('open')"
   >
-    <div class="glass-plant-card__stage">
-      <button
-        type="button"
-        class="glass-plant-card__media"
-        :aria-label="`Open ${title}`"
-        @click="$emit('open')"
-      >
+    <div
+      class="pointer-events-none relative z-[3] flex-none overflow-visible"
+      :class="featured ? 'w-[14rem]' : 'w-[13rem]'"
+    >
+      <div class="absolute inset-x-3 bottom-[0.65rem] z-[2] flex w-auto items-end justify-center p-0">
         <img
           v-if="imageUrl"
           :src="imageUrl"
           :alt="title"
-          class="glass-plant-card__image"
+          class="pointer-events-none block h-auto max-w-full object-contain object-bottom drop-shadow-[0_22px_28px_rgba(0,0,0,0.5)]"
+          :class="featured ? 'w-[13rem]' : 'w-[12rem]'"
           draggable="false"
         />
-        <span v-else class="glass-plant-card__fallback" aria-hidden="true">{{ initial }}</span>
-      </button>
+        <span
+          v-else
+          class="grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full bg-mint/12 font-heading text-[2rem] font-extrabold text-paper/35"
+          aria-hidden="true"
+        >
+          {{ initial }}
+        </span>
+      </div>
     </div>
 
-    <div class="glass-plant-card__body py-2">
+    <div
+      class="relative z-[1] flex min-w-0 flex-1 flex-col justify-between overflow-hidden py-[0.9rem] pr-4 pl-[0.15rem]"
+    >
       <div class="min-w-0">
-        <h3 class="font-heading text-base font-bold text-white sm:text-lg">{{ title }}</h3>
-        <p v-if="description" class="mt-1 line-clamp-2 text-sm leading-snug text-white/55">
+        <h3 class="font-heading text-base font-bold leading-tight text-white sm:text-lg">{{ title }}</h3>
+        <p v-if="subtitle" class="text-xs font-semibold leading-tight text-mint/90 sm:text-sm">{{ subtitle }}</p>
+        <p v-if="description" class="mt-2.5 line-clamp-2 text-sm leading-snug text-white/55">
           {{ description }}
         </p>
       </div>
@@ -68,13 +86,11 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
         </div>
         <div class="flex shrink-0 items-center gap-2">
           <slot name="actions" />
-          <button
-            type="button"
-            class="glass-plant-card__arrow"
-            :aria-label="`Open ${title}`"
-            @click="$emit('open')"
+          <span
+            class="inline-flex h-9 w-9 items-center justify-center text-white/70 transition-colors duration-[250ms] group-hover:text-white"
+            aria-hidden="true"
           >
-            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none">
               <path
                 d="M4 12 12 4M6.5 4H12v5.5"
                 stroke="currentColor"
@@ -83,139 +99,9 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
                 stroke-linejoin="round"
               />
             </svg>
-          </button>
+          </span>
         </div>
       </div>
     </div>
   </article>
 </template>
-
-<style scoped>
-.glass-plant-card {
-  --card-radius: 1.35rem;
-  --card-height: 11.75rem;
-  --image-col: 13rem;
-  --image-width: 12rem;
-  --image-inset: 0.75rem;
-  --pot-inset: 0.65rem;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  isolation: isolate;
-  height: var(--card-height);
-  overflow: visible;
-  border-radius: var(--card-radius);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(18, 46, 40, 0.55) 42%,
-    rgba(7, 24, 20, 0.72) 100%
-  );
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 18px 40px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  transition:
-    transform 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease;
-}
-
-.glass-plant-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.22);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 24px 50px rgba(0, 0, 0, 0.35);
-}
-
-.glass-plant-card.is-featured {
-  --card-height: 13rem;
-  --image-col: 14rem;
-  --image-width: 13rem;
-}
-
-.glass-plant-card__stage {
-  position: relative;
-  z-index: 3;
-  flex: none;
-  width: var(--image-col);
-  overflow: visible;
-  pointer-events: none;
-}
-
-.glass-plant-card__media {
-  position: absolute;
-  inset-inline: var(--image-inset);
-  bottom: var(--pot-inset);
-  z-index: 2;
-  display: flex;
-  width: auto;
-  cursor: pointer;
-  align-items: flex-end;
-  justify-content: center;
-  border: 0;
-  background: transparent;
-  padding: 0;
-  pointer-events: auto;
-}
-
-.glass-plant-card__image {
-  display: block;
-  width: var(--image-width);
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  object-position: bottom center;
-  filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.5));
-  pointer-events: none;
-}
-
-.glass-plant-card__fallback {
-  display: grid;
-  place-items: center;
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 999px;
-  background: rgba(117, 210, 188, 0.12);
-  color: rgba(246, 247, 243, 0.35);
-  font-family: "Quicksand", sans-serif;
-  font-size: 2rem;
-  font-weight: 800;
-}
-
-.glass-plant-card__body {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-  padding: 0.9rem 1rem 0.9rem 0.15rem;
-}
-
-.glass-plant-card__arrow {
-  display: inline-flex;
-  height: 2.25rem;
-  width: 2.25rem;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  border: 1.5px solid rgba(255, 255, 255, 0.7);
-  background: transparent;
-  color: #fff;
-  transition:
-    background-color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.glass-plant-card__arrow:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: scale(1.05);
-}
-</style>

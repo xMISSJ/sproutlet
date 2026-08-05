@@ -33,6 +33,7 @@ function metaFor(plant) {
 <template>
   <GlassPlantCard
     :title="plant.common_name"
+    :subtitle="plant.english_name"
     :description="plant.description"
     :image-url="plant.image_url"
     :meta="metaFor(plant)"

@@ -66,56 +66,21 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="plant-cabinet anim-rise-delay-2 mx-auto w-full max-w-4xl" role="region" aria-label="Plant cabinet">
-    <div class="cabinet-meta">
-      <p class="cabinet-caption">{{ caption }}</p>
-      <p class="cabinet-hint">{{ hint }}</p>
+  <div class="anim-rise-delay-2 mx-auto w-full max-w-4xl" role="region" aria-label="Plant cabinet">
+    <div class="mb-3.5 flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2 px-1">
+      <p class="m-0 text-xs font-semibold tracking-[0.08em] text-[rgba(236,214,186,0.72)] uppercase">
+        {{ caption }}
+      </p>
+      <p class="m-0 text-[0.72rem] text-paper/45">{{ hint }}</p>
     </div>
-    <div class="cabinet-stage">
-      <canvas ref="canvasRef" class="cabinet-canvas" aria-label="3D wooden plant cabinet" />
+    <div
+      class="overflow-hidden rounded-[2rem] border border-white/10 bg-[#071814] shadow-[0_28px_70px_rgba(0,0,0,0.35)]"
+    >
+      <canvas
+        ref="canvasRef"
+        class="block h-[clamp(360px,56vw,520px)] w-full cursor-grab touch-none"
+        aria-label="3D wooden plant cabinet"
+      />
     </div>
   </div>
 </template>
-
-<style scoped>
-.cabinet-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem 1.25rem;
-  margin-bottom: 0.85rem;
-  padding: 0 0.25rem;
-}
-
-.cabinet-caption {
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(236, 214, 186, 0.72);
-}
-
-.cabinet-hint {
-  margin: 0;
-  font-size: 0.72rem;
-  color: rgba(246, 247, 243, 0.45);
-}
-
-.cabinet-stage {
-  overflow: hidden;
-  border-radius: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #071814;
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
-}
-
-.cabinet-canvas {
-  display: block;
-  width: 100%;
-  height: clamp(360px, 56vw, 520px);
-  cursor: grab;
-  touch-action: none;
-}
-</style>

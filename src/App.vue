@@ -5,7 +5,7 @@ import { RouterLink, RouterView, useRoute } from "vue-router";
 const route = useRoute();
 
 const links = [
-  { to: "/", label: "My plants", name: "my-plants" },
+  { to: "/", label: "My Plants", name: "my-plants" },
   { to: "/catalog", label: "Catalog", name: "catalog" },
 ];
 

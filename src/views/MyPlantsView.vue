@@ -55,9 +55,14 @@ function clampPage() {
 
 async function refresh() {
   isLoading.value = true;
-  carePlants.value = await listCarePlants();
-  isLoading.value = false;
-  clampPage();
+  try {
+    carePlants.value = await listCarePlants();
+  } catch {
+    carePlants.value = [];
+  } finally {
+    isLoading.value = false;
+    clampPage();
+  }
 }
 
 async function onWatered(id) {
@@ -158,7 +163,7 @@ watch(sortedPlants, clampPage);
       </div>
 
       <div v-else class="grid gap-5">
-        <div class="flex flex-wrap items-end justify-between gap-3">
+        <div class="relative z-10 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 class="font-heading text-2xl font-bold text-white">In your care</h2>
             <p class="mt-1 text-sm text-white/60">
@@ -175,12 +180,13 @@ watch(sortedPlants, clampPage);
           </button>
         </div>
 
-        <div class="grid grid-cols-2 items-end gap-4 pt-2 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
+        <div class="grid grid-cols-2 items-end gap-x-4 gap-y-10 pt-24 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-12 sm:pt-28 lg:grid-cols-4">
           <CarePlantCard
-            v-for="item in pagedPlants"
+            v-for="(item, index) in pagedPlants"
             :key="item.id"
             :item="item"
             :watering-hint="wateringHint(item)"
+            :style="{ '--card-z': pagedPlants.length - index }"
             @open="
               (careItem) =>
                 careItem.plant_id &&

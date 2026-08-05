@@ -1,20 +1,15 @@
 import { normalizePlantForm } from "./plantForms";
+import { readCache, writeCache } from "./localCache";
 
 const STORAGE_KEY = "sproutlet.customPlants";
 
 function readCustomPlants() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+  const parsed = readCache(STORAGE_KEY, []);
+  return Array.isArray(parsed) ? parsed : [];
 }
 
 function writeCustomPlants(plants) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+  writeCache(STORAGE_KEY, plants);
 }
 
 export function isCustomPlantId(id) {

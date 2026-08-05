@@ -9,7 +9,7 @@ function cloneSeeds() {
 function matchesQuery(plant, query) {
   const q = query.trim().toLowerCase();
   if (!q) return true;
-  const haystack = [plant.common_name, plant.scientific_name, plant.description]
+  const haystack = [plant.common_name, plant.english_name, plant.scientific_name, plant.description]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
