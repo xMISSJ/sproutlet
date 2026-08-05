@@ -35,7 +35,7 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
 
 <template>
   <article
-    class="group relative isolate flex cursor-pointer flex-row items-stretch overflow-visible rounded-[1.35rem] border border-white/[0.14] bg-[linear-gradient(120deg,rgba(255,255,255,0.1)_0%,rgba(18,46,40,0.55)_42%,rgba(7,24,20,0.72)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-[18px] transition-[transform,border-color,box-shadow] duration-[350ms] ease-in-out hover:-translate-y-[3px] hover:border-white/[0.22] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_24px_50px_rgba(0,0,0,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[rgba(117,210,188,0.7)]"
+    class="group relative isolate flex transform-gpu cursor-pointer flex-row items-stretch overflow-visible rounded-[1.35rem] border border-white/[0.14] bg-[linear-gradient(120deg,rgba(255,255,255,0.1)_0%,rgba(18,46,40,0.55)_42%,rgba(7,24,20,0.72)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-[18px] transition-[transform,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-white/[0.22] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_24px_50px_rgba(0,0,0,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[rgba(117,210,188,0.7)]"
     :class="featured ? 'h-[13rem]' : 'h-[11.75rem]'"
     role="link"
     tabindex="0"
@@ -53,7 +53,7 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
           v-if="imageUrl"
           :src="imageUrl"
           :alt="title"
-          class="pointer-events-none block h-auto max-w-full object-contain object-bottom drop-shadow-[0_22px_28px_rgba(0,0,0,0.5)]"
+          class="pointer-events-none block h-auto max-w-full origin-bottom object-contain object-bottom drop-shadow-[0_22px_28px_rgba(0,0,0,0.5)] transform-gpu transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
           :class="featured ? 'w-[13rem]' : 'w-[12rem]'"
           draggable="false"
         />
@@ -71,7 +71,7 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
       class="relative z-[1] flex min-w-0 flex-1 flex-col justify-between overflow-hidden py-[0.9rem] pr-4 pl-[0.15rem]"
     >
       <div class="min-w-0">
-        <h3 class="font-heading text-base font-bold leading-tight text-white sm:text-lg">{{ title }}</h3>
+        <h3 class="font-brand text-xl font-bold leading-tight text-white sm:text-2xl">{{ title }}</h3>
         <p v-if="subtitle" class="text-xs font-semibold leading-tight text-mint/90 sm:text-sm">{{ subtitle }}</p>
         <p v-if="description" class="mt-2.5 line-clamp-2 text-sm leading-snug text-white/55">
           {{ description }}
@@ -87,7 +87,7 @@ const initial = computed(() => props.title.trim().slice(0, 1).toUpperCase() || "
         <div class="flex shrink-0 items-center gap-2">
           <slot name="actions" />
           <span
-            class="inline-flex h-9 w-9 items-center justify-center text-white/70 transition-colors duration-[250ms] group-hover:text-white"
+            class="inline-flex h-9 w-9 items-center justify-center text-white/70 transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-white"
             aria-hidden="true"
           >
             <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none">

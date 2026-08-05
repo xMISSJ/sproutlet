@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppNav: typeof import('./src/components/AppNav.vue')['default']
     CareEmptyState: typeof import('./src/components/CareEmptyState.vue')['default']
     CarePlantCard: typeof import('./src/components/CarePlantCard.vue')['default']
     GlassPlantCard: typeof import('./src/components/GlassPlantCard.vue')['default']
@@ -18,6 +19,7 @@ declare module 'vue' {
     PlantCard: typeof import('./src/components/PlantCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SproutletMark: typeof import('./src/components/SproutletMark.vue')['default']
     UInput: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Input.vue')['default']
   }
 }

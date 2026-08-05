@@ -118,7 +118,7 @@ watch(() => props.id, refresh);
 </script>
 
 <template>
-  <section class="grid gap-8 text-[var(--paper)]">
+  <section class="grid gap-8 text-paper">
     <div>
       <button
         type="button"
@@ -143,7 +143,7 @@ watch(() => props.id, refresh);
 
     <template v-else-if="plant">
       <div class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-        <div class="surface-card overflow-hidden border border-white/10 bg-[var(--hero-elevated)] shadow-[0_16px_50px_rgba(0,0,0,0.25)]">
+        <div class="surface-card overflow-hidden border border-white/10 bg-hero-elevated shadow-[0_16px_50px_rgba(0,0,0,0.25)]">
           <img
             v-if="isEditing ? form.image_url : plant.image_url"
             :src="isEditing ? form.image_url : plant.image_url"
@@ -158,10 +158,10 @@ watch(() => props.id, refresh);
         <div class="grid gap-5">
           <template v-if="!isEditing">
             <div class="anim-rise">
-              <p class="text-xs font-semibold tracking-[0.2em] text-[var(--mint)] uppercase">
+              <p class="text-xs font-semibold tracking-[0.2em] text-mint uppercase">
                 {{ isCustom ? "Your plant" : "Catalog species" }}
               </p>
-              <h1 class="font-heading mt-2 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+              <h1 class="font-brand mt-2 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                 {{ plant.common_name }}
               </h1>
               <p v-if="plant.scientific_name" class="mt-2 text-lg text-white/55 italic">
@@ -171,7 +171,7 @@ watch(() => props.id, refresh);
 
             <p class="anim-rise-delay leading-relaxed text-white/75">{{ plant.description }}</p>
 
-            <dl class="anim-rise-delay-2 grid gap-3 rounded-[2rem] border border-white/10 bg-[var(--hero-elevated)] p-5 text-sm sm:grid-cols-2">
+            <dl class="anim-rise-delay-2 grid gap-3 rounded-[2rem] border border-white/10 bg-hero-elevated p-5 text-sm sm:grid-cols-2">
               <div>
                 <dt class="text-white/45">Care level</dt>
                 <dd class="mt-0.5 font-semibold capitalize text-white">{{ plant.care_level }}</dd>
@@ -247,7 +247,7 @@ watch(() => props.id, refresh);
 
           <p
             v-if="notice"
-            class="rounded-2xl border border-[var(--mint)]/30 bg-[var(--mint)]/15 px-4 py-3 text-sm text-[var(--mint)]"
+            class="rounded-2xl border border-mint/30 bg-mint/15 px-4 py-3 text-sm text-mint"
           >
             {{ notice }}
           </p>
@@ -256,7 +256,7 @@ watch(() => props.id, refresh);
             <template v-if="isEditing">
               <button
                 type="button"
-                class="cursor-pointer rounded-full border-0 bg-[var(--mint)] px-5 py-2.5 text-sm font-semibold text-[var(--hero)] transition hover:brightness-110 disabled:opacity-60"
+                class="cursor-pointer rounded-full border-0 bg-mint px-5 py-2.5 text-sm font-semibold text-hero transition hover:brightness-110 disabled:opacity-60"
                 :disabled="isSaving"
                 @click="onSave"
               >
@@ -277,7 +277,7 @@ watch(() => props.id, refresh);
                 :class="
                   isPlantInCare(plant.id, carePlants)
                     ? 'bg-white/10 text-white/70'
-                    : 'bg-[var(--mint)] text-[var(--hero)] hover:brightness-110'
+                    : 'bg-mint text-hero hover:brightness-110'
                 "
                 :disabled="isPlantInCare(plant.id, carePlants)"
                 @click="onAdd"
