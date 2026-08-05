@@ -92,7 +92,7 @@ watch(query, scheduleSearch);
 </script>
 
 <template>
-  <section class="grid gap-10 text-[var(--paper)]">
+  <section class="grid gap-10 text-paper">
     <div class="anim-rise max-w-2xl">
       <h1 class="font-heading text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
         Plant catalog
@@ -109,7 +109,7 @@ watch(query, scheduleSearch);
           class="cursor-pointer rounded-full px-4 py-2 text-sm font-semibold transition"
           :class="
             careFilter === filter.id
-              ? 'border-0 bg-white text-[var(--hero)]'
+              ? 'border-0 bg-white text-hero'
               : 'border border-white/15 bg-white/5 text-white/75 hover:bg-white/10 hover:text-white'
           "
           @click="careFilter = filter.id"
@@ -135,7 +135,7 @@ watch(query, scheduleSearch);
 
     <p
       v-if="notice"
-      class="rounded-2xl border border-[var(--mint)]/30 bg-[var(--mint)]/15 px-4 py-3 text-sm text-[var(--mint)]"
+      class="rounded-2xl border border-mint/30 bg-mint/15 px-4 py-3 text-sm text-mint"
     >
       {{ notice }}
     </p>
@@ -154,7 +154,7 @@ watch(query, scheduleSearch);
         No plants matched that search.
       </div>
 
-      <div v-else class="anim-rise-delay-2 grid items-stretch gap-5 pt-24 sm:grid-cols-1 xl:grid-cols-2">
+      <div v-else class="anim-rise-delay-2 grid items-stretch gap-5 md:gap-5 pt-24 sm:grid-cols-1 xl:grid-cols-2">
         <PlantCard
           v-for="(plant, index) in plants"
           :key="plant.id"

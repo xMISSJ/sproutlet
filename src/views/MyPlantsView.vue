@@ -92,9 +92,9 @@ watch(sortedPlants, clampPage);
 </script>
 
 <template>
-  <section class="grid gap-12 text-[var(--paper)]">
+  <section class="grid gap-12 text-paper">
     <div class="mx-auto max-w-3xl pt-6 text-center sm:pt-10">
-      <p class="anim-rise text-[11px] font-semibold tracking-[0.28em] text-[var(--mint)] uppercase">
+      <p class="anim-rise text-[11px] font-semibold tracking-[0.28em] text-mint uppercase">
         Nature's best
       </p>
       <h1 class="font-brand anim-rise-delay mt-4 text-[clamp(3.5rem,12vw,7.5rem)] leading-[0.9] font-extrabold tracking-tight text-white">
@@ -115,7 +115,7 @@ watch(sortedPlants, clampPage);
         class="anim-rise-delay-2 grid gap-4 lg:grid-cols-[0.85fr_1.15fr]"
       >
         <article
-          class="surface-card flex flex-col justify-between gap-6 border border-white/10 bg-[var(--hero-elevated)] p-6 sm:p-8"
+          class="surface-card flex flex-col justify-between gap-6 border border-white/10 bg-hero-elevated p-6 sm:p-8"
         >
           <div>
             <p class="font-heading text-5xl font-bold text-white">6+</p>
@@ -124,9 +124,9 @@ watch(sortedPlants, clampPage);
           <div class="flex items-center gap-2">
             <div class="flex -space-x-2">
               <span
-                v-for="tone in ['bg-[var(--mint)]', 'bg-[var(--sage)]', 'bg-[var(--leaf)]']"
+                v-for="tone in ['bg-mint', 'bg-sage', 'bg-leaf']"
                 :key="tone"
-                class="inline-flex h-9 w-9 rounded-full border-2 border-[var(--hero-elevated)]"
+                class="inline-flex h-9 w-9 rounded-full border-2 border-hero-elevated"
                 :class="tone"
               />
             </div>
@@ -145,15 +145,15 @@ watch(sortedPlants, clampPage);
 
         <button
           type="button"
-          class="surface-card group flex cursor-pointer items-center justify-between gap-4 border-0 bg-white px-6 py-6 text-left text-[var(--hero)] transition hover:-translate-y-0.5 sm:px-8"
+          class="surface-card group flex cursor-pointer items-center justify-between gap-4 border-0 bg-white px-6 py-6 text-left text-hero transition hover:-translate-y-0.5 sm:px-8"
           @click="router.push('/catalog')"
         >
           <div>
             <p class="font-heading text-xl font-bold sm:text-2xl">Explore the plant catalog</p>
-            <p class="mt-1 text-sm text-[var(--moss)]">Add your first plant and start tracking care</p>
+            <p class="mt-1 text-sm text-moss">Add your first plant and start tracking care</p>
           </div>
           <span
-            class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--hero)] text-white transition group-hover:scale-105"
+            class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-hero text-white transition group-hover:scale-105"
           >
             <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
@@ -163,7 +163,7 @@ watch(sortedPlants, clampPage);
       </div>
 
       <div v-else class="grid gap-5">
-        <div class="relative z-10 flex flex-wrap items-end justify-between gap-3">
+        <div class="relative z-10 flex flex-wrap items-end justify-between gap-3 scroll-mt-28">
           <div>
             <h2 class="font-heading text-2xl font-bold text-white">In your care</h2>
             <p class="mt-1 text-sm text-white/60">
@@ -180,13 +180,12 @@ watch(sortedPlants, clampPage);
           </button>
         </div>
 
-        <div class="grid grid-cols-2 items-end gap-x-4 gap-y-10 pt-24 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-12 sm:pt-28 lg:grid-cols-4">
+        <div class="grid grid-cols-2 items-end gap-x-4 gap-y-16 pt-24 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-14 sm:pt-28 lg:grid-cols-4">
           <CarePlantCard
             v-for="(item, index) in pagedPlants"
             :key="item.id"
             :item="item"
             :watering-hint="wateringHint(item)"
-            :style="{ '--card-z': pagedPlants.length - index }"
             @open="
               (careItem) =>
                 careItem.plant_id &&

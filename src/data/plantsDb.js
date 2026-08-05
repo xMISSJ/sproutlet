@@ -16,9 +16,51 @@ function matchesQuery(plant, query) {
   return haystack.includes(q);
 }
 
+/** Prefer seed list order (Pachira first) over alphabetical Supabase results. */
+const seedOrderById = new Map(seedPlants.map((plant, index) => [String(plant.id), index]));
+const seedOrderByName = new Map(
+  seedPlants.map((plant, index) => [plant.common_name.toLowerCase(), index]),
+);
+
+function catalogSortIndex(plant) {
+  if (plant.source === "custom") return -1;
+  const byId = seedOrderById.get(String(plant.id));
+  if (byId != null) return byId;
+  const byName = seedOrderByName.get(String(plant.common_name || "").toLowerCase());
+  if (byName != null) return byName;
+  return seedPlants.length + 1;
+}
+
+function sortCatalog(plants) {
+  return [...plants].sort((a, b) => {
+    const diff = catalogSortIndex(a) - catalogSortIndex(b);
+    if (diff !== 0) return diff;
+    return String(a.common_name || "").localeCompare(String(b.common_name || ""));
+  });
+}
+
 async function loadLocalCatalog() {
   const custom = await listCustomPlants();
   return [...custom, ...cloneSeeds()];
+}
+
+/** Fill gaps when Supabase is missing newer seed entries (match by name). */
+function mergeMissingSeeds(all) {
+  const names = new Set(all.map((plant) => String(plant.common_name || "").toLowerCase()));
+  const scientific = new Set(
+    all.map((plant) => String(plant.scientific_name || "").toLowerCase()).filter(Boolean),
+  );
+
+  cloneSeeds().forEach((seed) => {
+    const nameKey = String(seed.common_name || "").toLowerCase();
+    const sciKey = String(seed.scientific_name || "").toLowerCase();
+    if (names.has(nameKey) || (sciKey && scientific.has(sciKey))) return;
+    all.push(seed);
+    names.add(nameKey);
+    if (sciKey) scientific.add(sciKey);
+  });
+
+  return all;
 }
 
 /**
@@ -56,12 +98,15 @@ export async function searchCatalogPlants({
     custom.forEach((plant) => {
       if (!ids.has(String(plant.id))) all.unshift(plant);
     });
+    mergeMissingSeeds(all);
   }
 
-  const filtered = all.filter((plant) => {
-    if (careLevel !== "all" && plant.care_level !== careLevel) return false;
-    return matchesQuery(plant, query);
-  });
+  const filtered = sortCatalog(
+    all.filter((plant) => {
+      if (careLevel !== "all" && plant.care_level !== careLevel) return false;
+      return matchesQuery(plant, query);
+    }),
+  );
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));

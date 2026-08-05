@@ -1,12 +1,12 @@
 ---
 description: Prefer Sproutlet theme color utilities over arbitrary var() Tailwind classes
 globs: **/*.{vue,css}
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Theme color utilities
 
-Brand colors live in `src/style.css` (`:root` + `@theme`). Use Tailwind theme utilities — never arbitrary `[var(--token)]` classes.
+Brand colors live in `src/style.css` (`:root` + `@theme`). Write theme tokens as Tailwind utilities — never wrap them in arbitrary `[var(--token)]` classes.
 
 ```html
 <!-- ❌ BAD -->

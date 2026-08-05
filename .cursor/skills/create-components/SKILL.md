@@ -39,7 +39,7 @@ Name files in PascalCase matching the component: `CarePlantCard.vue`, `PlantForm
 **Prefer Tailwind classes on the element** over a `<style scoped>` block.
 
 - Layout, spacing, typography, colors, borders, radius, flex/grid, simple hover/focus → Tailwind utilities (including arbitrary values like `bg-[...]`, `shadow-[...]`, `h-[clamp(...)]`)
-- Theme tokens already in `@theme`: `text-mint`, `bg-hero`, `text-paper`, `font-heading`, etc.
+- Theme tokens already in `@theme`: write them as utilities (`text-mint`, `bg-hero`, `text-paper`, `font-heading`) — never `text-[var(--mint)]` / `bg-[var(--hero)]`
 - Group hover/focus: use `group` / `group-hover:` / `focus-visible:` instead of nested CSS selectors
 - Conditional variants: bind classes with `:class` (e.g. featured size) instead of BEM modifier CSS
 
@@ -89,6 +89,7 @@ Follow patterns already used by `PlantCard.vue` and `PlantCabinet.vue`:
 - Giant “god” components that recreate a whole page — split by section instead
 - Over-abstracting with premature props for a single use
 - Scoped CSS that only duplicates what Tailwind utilities already cover
+- Arbitrary theme colors like `text-[var(--mint)]` — use `text-mint` instead
 - HTML comments (`<!-- -->`) in templates
 
 ## Checklist
@@ -99,4 +100,5 @@ Follow patterns already used by `PlantCard.vue` and `PlantCabinet.vue`:
 - [ ] Styles are Tailwind-first; no redundant `<style scoped>` for layout/typography/color
 - [ ] No HTML comments in templates
 - [ ] Styling matches the current dark shell / existing tokens
+- [ ] New `public/plants/` PNGs were reframed via the `reframe-plant-images` skill
 - [ ] No copy-pasted twin of an existing component
