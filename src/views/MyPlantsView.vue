@@ -119,7 +119,7 @@ watch(sortedPlants, clampPage);
       <div v-else class="grid gap-5">
         <div class="relative z-10 flex flex-wrap items-end justify-between gap-3 scroll-mt-28">
           <div>
-            <h2 class="font-heading text-2xl font-bold text-white">In your care</h2>
+            <h2 class="font-brand text-3xl font-bold text-white sm:text-4xl">In your care</h2>
             <p class="mt-1 text-sm text-white/60">
               {{ sortedPlants.length }} plant{{ sortedPlants.length === 1 ? "" : "s" }}
               <span v-if="totalPages > 1"> · {{ pageLabel }}</span>

@@ -124,4 +124,18 @@ export const seedPlants = [
     model_style: "bushy",
     image_url: `${import.meta.env.BASE_URL}plants/polyscias-balfouriana.png`,
   },
+  {
+    id: "rotundifolia-pilosior",
+    common_name: "Peperomia Rotundifolia",
+    english_name: "Trailing Jade",
+    scientific_name: "Peperomia rotundifolia var. pilosior",
+    description:
+      "Also called trailing jade — dense stems of small, round, button-like leaves. Prefers bright, indirect light; let the top soil dry between waterings and avoid soggy roots.",
+    care_level: "easy",
+    light: "bright-indirect",
+    water_frequency_days: 7,
+    humidity: "average",
+    model_style: "bushy",
+    image_url: `${import.meta.env.BASE_URL}plants/rotundifolia-pilosior.png`,
+  },
 ];

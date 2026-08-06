@@ -164,8 +164,8 @@ watch(() => props.id, refresh);
               <h1 class="font-brand mt-2 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                 {{ plant.common_name }}
               </h1>
-              <p v-if="plant.scientific_name" class="mt-2 text-lg text-white/55 italic">
-                {{ plant.scientific_name }}
+              <p v-if="plant.english_name" class="mt-2 text-lg text-white/55 italic">
+                {{ plant.english_name }}
               </p>
             </div>
 
